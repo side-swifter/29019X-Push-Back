@@ -75,7 +75,7 @@ void initialize() {
       {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
       {"Red Left\n\n help", RedLeft},*/
       {"Solow win point auto\n\n help", SWP},
-      {"Regular auto\n\n help", Reg_auto},
+      {"Regular auto\n\n help", Reg_auto_left},
 
 
 
