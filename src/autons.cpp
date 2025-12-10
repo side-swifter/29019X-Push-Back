@@ -427,13 +427,14 @@ void SWP() {
   okapi::QLength RML = 23.67_in; // right match loader
   okapi::QLength indis = -14.191_in; // distance from robot center into matchloader
   // center balls auton constants
+  okapi::QLength FBOX = 2.5_in; // first ball offset x value
   okapi::QLength CBD = 14.8_in; // center ball distance
   okapi::QLength CBSS = -33.5_in; // forward direction
   // center goal constants
-  okapi::QLength CGBDX = -7.7_in; // center back goal distance (x value)
-  okapi::QLength BCGDY = 6.5_in; // back center goal distance (y value)
+  okapi::QLength CGBDX = -8.85_in; // center back goal distance (x value)
+  okapi::QLength BCGDY = 7.25_in; // back center goal distance (y value)
   // right matchloader auton constants
-  okapi::QLength RGDX = -47.45_in; // right matchloader distance 
+  okapi::QLength RGDX = -46.25_in; // right matchloader distance 
   okapi::QLength RGDY = 0.2_in; // right matchloader distance 
 
   // wait times
@@ -463,12 +464,14 @@ void SWP() {
   // actual code
 
   // get matchloads
+
+  chassis.pid_odom_set({{{RML, 0_in}, fwd, DRIVE_SPEED-17,},
+                                    {{RML, indis,180_deg}, fwd, 90}});
+
   switcher.set(true);
   intake.move(127);
   hood.set(false);
   scraper.set(true);
-  chassis.pid_odom_set({{{RML, 0_in}, fwd, DRIVE_SPEED-17,},
-                                    {{RML, indis,180_deg}, fwd, 90}});
   chassis.pid_wait();
   pros::delay(scrapertime);
 
@@ -479,7 +482,6 @@ void SWP() {
   chassis.pid_drive_set(-22.85_in, DRIVE_SPEED);
   chassis.pid_wait();
   hood.set(true);
-  scraper.set(true);
   pros::delay(goaltime);
   hood.set(false);
   scraper.set(false);
@@ -491,31 +493,59 @@ void SWP() {
   // get out of long goal and grab balls 
   
   chassis.pid_odom_set({{{RML, 4_in,180_deg}, fwd, DRIVE_SPEED,},
-                                      {{-0.5_in, CBD,320_deg}, fwd, TURN_SPEED,},
+                                      {{FBOX, CBD+2_in,325_deg}, fwd, DRIVE_SPEED-30,},
                                       {{CBSS, CBD, 270_deg}, fwd, DRIVE_SPEED-40},
                                       {{CBSS-CGBDX, CBD+BCGDY, 225_deg}, rev, DRIVE_SPEED,}
                                     });
-  chassis.pid_wait();
-  pros::delay(450);
-  hood.set(true);
+
+  // things I'm doing while moving
+
+  // put the scraper on the first set of balls to keep them from moving away
+  pros::delay(240);
   scraper.set(true);
-  pros::delay(211);
+  // pick the scraper up before getting second set of balls
+  pros::delay(500);
+  scraper.set(false);
+
+
+  // put down the scraper again to keep the seconds set of balls from moving away
+  pros::delay(290);
+  scraper.set(true);
+
+
+  // set movement
+  chassis.pid_wait();
+
+  // score the balls in center goal
+  hood.set(true);
+  pros::delay(500);
+  // keep any balls from falling out
+  intake.move(-90);
+  hood.set(false);
+  
+  
 
   
   
   
   // get matchload
   chassis.pid_odom_set({{{RGDX, RGDY}, fwd, DRIVE_SPEED,},
-                                      {{RGDX,indis-0.70_in, 180_deg}, fwd, DRIVE_SPEED}});
+                                      {{RGDX,indis-0.69_in, 180_deg}, fwd, DRIVE_SPEED}});
+  
+  // spin the intake forward when moving again to matchload scraper
+  intake.move(127);
+  // set movement and matchload
   chassis.pid_wait();
-  pros::delay(scrapertime+150);
+  pros::delay(scrapertime+250);
   
 
   // score long goal right
   chassis.pid_drive_set(-22.85_in, DRIVE_SPEED);
+  switcher.set(true);
   chassis.pid_wait();
+  // scoreeee
   hood.set(true);
-  pros::delay(1500);
+  pros::delay(1600);
 
   // end
 
