@@ -74,8 +74,10 @@ void initialize() {
       {"Boomerang Pure Pursuit\n. \nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
       {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
       {"Red Left\n\n help", RedLeft},*/
+      {"regular auton right\n\n help", autoright},
+      {"regular auton left\n\n help", autoleft},
       {"Solow win point auto\n\n help", SWP},
-      {"Regular auto\n\n help", Reg_auto_left},
+
 
 
 
@@ -287,11 +289,17 @@ void opcontrol() {
   if (master.get_digital_new_press(DIGITAL_RIGHT)) {
     hood.set(!hood.get());
   }
+
+
+  if (master.get_digital_new_press(DIGITAL_Y)) {
+    hood.set(!hood.get());
+  }  
     
 
-  if (master.get_digital(DIGITAL_LEFT)) {
-    void page_down();
+  if (master.get_digital(DIGITAL_RIGHT)) {
+    descore.set(!descore.get());
   }
+
 
 
     

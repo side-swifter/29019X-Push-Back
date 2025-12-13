@@ -16,3 +16,4 @@ inline pros::MotorGroup intake({7,-8,9,-10});  // Negative port will reverse the
 inline ez::Piston scraper('H');     
 inline ez::Piston switcher('G');
 inline ez::Piston hood('F');
+inline ez::Piston descore('A');

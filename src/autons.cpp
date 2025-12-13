@@ -1,3 +1,4 @@
+#include "EZ-Template/drive/drive.hpp"
 #include "EZ-Template/util.hpp"
 #include "okapi/api/units/QLength.hpp"
 #include "pros/motors.h"
@@ -434,7 +435,7 @@ void SWP() {
   okapi::QLength CGBDX = -8.85_in; // center back goal distance (x value)
   okapi::QLength BCGDY = 7.25_in; // back center goal distance (y value)
   // right matchloader auton constants
-  okapi::QLength RGDX = -46.25_in; // right matchloader distance 
+  okapi::QLength RGDX = -46.35_in; // right matchloader distance 
   okapi::QLength RGDY = 0.2_in; // right matchloader distance 
 
   // wait times
@@ -491,9 +492,14 @@ void SWP() {
 
   // get out of long goal and grab balls 
   
+  hood.set(false);
+  scraper.set(false);
+  switcher.set(false);
+
+
   chassis.pid_odom_set({{{RML, 4_in,180_deg}, fwd, DRIVE_SPEED,},
-                                      {{FBOX, CBD+2_in,325_deg}, fwd, DRIVE_SPEED-30,},
-                                      {{CBSS, CBD, 270_deg}, fwd, DRIVE_SPEED-40},
+                                      {{FBOX, CBD+2_in,325_deg}, fwd, DRIVE_SPEED,},
+                                      {{CBSS, CBD, 270_deg}, fwd, DRIVE_SPEED},
                                       {{CBSS-CGBDX, CBD+BCGDY, 225_deg}, rev, DRIVE_SPEED,}
                                     });
 
@@ -501,26 +507,29 @@ void SWP() {
   // things I'm doing while moving
 
   // done to save time
-  hood.set(false);
-  scraper.set(false);
-  switcher.set(false);
+
 
   // put the scraper on the first set of balls to keep them from moving away
-  pros::delay(240);
+  pros::delay(340);
   scraper.set(true);
-  // pick the scraper up before getting second set of balls
+
   pros::delay(500);
   scraper.set(false);
 
 
-  // put down the scraper again to keep the seconds set of balls from moving away
-  pros::delay(290);
+  pros::delay(300);
   scraper.set(true);
+
+  // pick the scraper up before getting second set of balls
+
 
 
   // set movement
   chassis.pid_wait();
 
+
+
+  
   // score the balls in center goal
   hood.set(true);
   pros::delay(500);
@@ -565,17 +574,8 @@ void SWP() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-void Reg_auto_left() {
+void autoleft() {
+  // left auton code
 
 
   // setup
@@ -584,77 +584,55 @@ void Reg_auto_left() {
   chassis.drive_sensor_reset(); // Reset drive sensors to 0
   chassis.slew_drive_set(true);// enable global drive slew
   chassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
-  // values that keep changing for no reason
-  okapi::QLength LGX = -20.5_in; // left goal x value
-  okapi::QLength LGY = 15.5_in; // left goal y value
-  okapi::QLength indis = 0.12_in; // right goal x value
 
 
-
-  // actual code starts here
-
-  chassis.pid_odom_set({{{0_in, 42_in}, fwd, DRIVE_SPEED,},
-                                    {{5_in, -8_in, 315_deg}, rev, DRIVE_SPEED}
-                                  });
-
-  // setup code to do quickly while moving
-  // set piston positions
-  hood.set(false);
-  scraper.set(false);
-  switcher.set(false);
-  // start intake
   intake.move(127);
+  chassis.pid_odom_set({{{-3.5_in, 27_in}, fwd, DRIVE_SPEED,}},
 
-  // keep balls from moving away
-  pros::delay(240);
+                                   true);
+
+  chassis.pid_wait_until(15.9_in);
   scraper.set(true);
-
-
-  // conclude movement
   chassis.pid_wait();
+  
 
-  // score in center mid goal
-  hood.set(true);
-  pros::delay(420);
-  // keep any loose balls from falling out and leave
-  intake.move(-90);
-  hood.set(false);
-  intake.move(127);
-
-    chassis.pid_odom_set({{{LGX, 9_in, 225_deg}, fwd, DRIVE_SPEED,},
-                                    {{LGX, indis, 0_deg}, fwd, DRIVE_SPEED}
-
-                                  });
+  chassis.pid_drive_set(-2_in, DRIVE_SPEED);
 
 
-  // things to do while moving
-  switcher.set(true);
-  // update movement
-  chassis.pid_wait();
-  // wait to matchload
-  pros::delay(450);
-
-
-  // back into long goal
-  chassis.pid_drive_set(-22.85_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(-135_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
 
-  // score in long goal
-  hood.button_toggle(true);
-  pros::delay(1300);
-  hood.button_toggle(false);
 
+  chassis.pid_drive_set(-6.7_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
 
-
-  // finish the thing
   hood.set(true);
-  pros::delay(1300);
+  switcher.set(true);
+  pros::delay(580);
+  hood.set(false);
+
+    // done scoring middle
 
 
 
+  chassis.pid_drive_set(29.4_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
 
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
 
-  // end
+  chassis.pid_drive_set(5.37_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  pros::delay(1100);
+
+  chassis.pid_drive_set(-19_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  hood.set(true);
+  pros::delay(2500);
+
 
 
 }
@@ -676,11 +654,11 @@ void Reg_auto_left() {
 
 
 
-// regular right auto
 
 
 
-void Reg_auto_right() {
+void autoright() {
+  // right auton code
 
 
   // setup
@@ -689,75 +667,78 @@ void Reg_auto_right() {
   chassis.drive_sensor_reset(); // Reset drive sensors to 0
   chassis.slew_drive_set(true);// enable global drive slew
   chassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
-  // values that keep changing for no reason
-  okapi::QLength LGX = -20.5_in; // left goal x value
-  okapi::QLength LGY = 15.5_in; // left goal y value
-  okapi::QLength indis = 0.12_in; // right goal x value
-
-
-
-  // actual code starts here
-
-  chassis.pid_odom_set({{{0_in, 42_in}, fwd, DRIVE_SPEED,},
-                                    {{5_in, -8_in, 315_deg}, rev, DRIVE_SPEED}
-                                  });
-
-  // setup code to do quickly while moving
-  // set piston positions
-  hood.set(false);
-  scraper.set(false);
   switcher.set(true);
-  // start intake
-  intake.move(127);
 
-  // keep balls from moving away
-  pros::delay(240);
+
+  intake.move(60);
+  chassis.pid_odom_set({{{3.5_in, 27_in}, fwd, DRIVE_SPEED,}},
+
+                                   true);
+
+  chassis.pid_wait_until(14.89_in);
   scraper.set(true);
+  intake.move(100);
 
-
-  // conclude movement
   chassis.pid_wait();
 
-  chassis.pid_turn_set(135_deg, TURN_SPEED);
-  chassis.pid_wait();
+  
 
-  // score in center low goal
+  chassis.pid_drive_set(-1.24_in, DRIVE_SPEED);
+
+
+  chassis.pid_wait_quick_chain();
+  scraper.set(false);
+  chassis.pid_turn_set(-45_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+  intake.move(-30);
+  
+
+
+  chassis.pid_drive_set(5.6_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
   intake.move(-127);
-  pros::delay(120);
-  // push the balls that didn't score back in to top
+  pros::delay(1400);
   intake.move(127);
 
-    chassis.pid_odom_set({{{LGX, 9_in, 315_deg}, fwd, DRIVE_SPEED,},
-                                    {{LGX, indis, 0_deg}, fwd, DRIVE_SPEED}
 
-                                  });
 
-  // update movement
+  
+
+
+    // done scoring middle
+
+
+
+  chassis.pid_drive_set(-2_in,DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
-  // wait to matchload
-  pros::delay(450);
 
-
-  // back into long goal
-  chassis.pid_drive_set(-22.85_in, DRIVE_SPEED);
-  chassis.pid_wait_quick();
-
-  // score in long goal
-  hood.button_toggle(true);
-  pros::delay(1300);
-  hood.button_toggle(false);
+  chassis.pid_turn_set(130_deg, TURN_SPEED);
+  
+  chassis.pid_wait_quick_chain();
 
 
 
-  // finish the thing
+  chassis.pid_drive_set(19.8_in, DRIVE_SPEED);
+
+  chassis.pid_wait_quick_chain();
+
+  chassis.pid_turn_set(180_deg, TURN_SPEED-15);
+  scraper.set(true);
+  chassis.pid_wait_quick_chain();
+
+  chassis.pid_drive_set(9.6_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  pros::delay(1350);
+
+  chassis.pid_drive_set(-20_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
   hood.set(true);
-  pros::delay(1300);
+  pros::delay(2500);
 
 
 
-
-
-  // end
 
 
 }

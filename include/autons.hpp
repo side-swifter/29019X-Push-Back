@@ -17,4 +17,5 @@ void odom_boomerang_example();
 void odom_boomerang_injected_pure_pursuit_example();
 void measure_offsets();
 void SWP();
-void Reg_auto_left();
+void autoleft();
+void autoright();
