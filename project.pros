@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "v.0.2.38 GRID WALKER",
+    "project_name": "v.0.3.28 GRID WALKER",
     "target": "v5",
     "templates": {
       "EZ-Template": {
@@ -426,7 +426,8 @@
     "upload_options": {
       "description": "gridwalkers.net , tusker, morrisville",
       "icon": "X",
-      "after": "screen"
+      "after": "screen",
+      "slot": 1
     },
     "use_early_access": false
   }

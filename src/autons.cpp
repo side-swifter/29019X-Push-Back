@@ -587,51 +587,58 @@ void autoleft() {
 
 
   intake.move(127);
-  chassis.pid_odom_set({{{-3.5_in, 27_in}, fwd, DRIVE_SPEED,}},
+  chassis.pid_odom_set({{{-3.8_in, 27_in}, fwd, DRIVE_SPEED,}},
 
                                    true);
 
-  chassis.pid_wait_until(15.9_in);
+  chassis.pid_wait_until(15.35_in);
   scraper.set(true);
   chassis.pid_wait();
   
 
-  chassis.pid_drive_set(-2_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-1_in, DRIVE_SPEED-15);
 
 
   chassis.pid_wait_quick_chain();
-  chassis.pid_turn_set(-135_deg, TURN_SPEED);
+  chassis.pid_turn_set(-135_deg, TURN_SPEED-15);
   chassis.pid_wait_quick_chain();
 
 
-  chassis.pid_drive_set(-6.7_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-6.9_in, DRIVE_SPEED-15);
   chassis.pid_wait_quick_chain();
-
+  
+  intake.move(85);
   hood.set(true);
-  switcher.set(true);
-  pros::delay(580);
+  pros::delay(767);
+  intake.move(127);
   hood.set(false);
+  switcher.set(true);
 
     // done scoring middle
 
 
 
-  chassis.pid_drive_set(29.4_in, DRIVE_SPEED);
+  chassis.pid_drive_set(27.5_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
 
   chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
 
-  chassis.pid_drive_set(5.37_in, DRIVE_SPEED);
+  pros::delay(100);
+
+  chassis.pid_drive_set(11.1_in, DRIVE_SPEED-75);
   chassis.pid_wait_quick_chain();
 
-  pros::delay(1100);
+  pros::delay(1270);
+
+  chassis.pid_turn_set(-180, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
 
   chassis.pid_drive_set(-19_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
 
   hood.set(true);
-  pros::delay(2500);
+  pros::delay(1800);
 
 
 
@@ -698,7 +705,7 @@ void autoright() {
   chassis.pid_wait_quick_chain();
 
   intake.move(-127);
-  pros::delay(1400);
+  pros::delay(1330);
   intake.move(127);
 
 
@@ -706,7 +713,7 @@ void autoright() {
   
 
 
-    // done scoring middle
+    // done scoring low middle
 
 
 
@@ -719,25 +726,119 @@ void autoright() {
 
 
 
-  chassis.pid_drive_set(19.8_in, DRIVE_SPEED);
-
+  chassis.pid_drive_set(19.2_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
 
-  chassis.pid_turn_set(180_deg, TURN_SPEED-15);
   scraper.set(true);
+
+  chassis.pid_turn_set(180_deg, TURN_SPEED-30);
   chassis.pid_wait_quick_chain();
 
-  chassis.pid_drive_set(9.6_in, DRIVE_SPEED);
+
+  chassis.pid_drive_set(14.5_in, DRIVE_SPEED-80);
   chassis.pid_wait_quick_chain();
+
 
   pros::delay(1350);
 
-  chassis.pid_drive_set(-20_in, DRIVE_SPEED);
+
+
+
+  chassis.pid_turn_set(182.5_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  chassis.pid_drive_set(-19_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
   hood.set(true);
   pros::delay(2500);
 
 
+
+
+
+}
+
+
+
+
+
+
+
+
+void skills() {
+  // left auton code
+
+
+  // setup
+  chassis.pid_targets_reset(); // Resets PID targets to 0
+  chassis.drive_imu_reset(); // Reset gyro position to 0
+  chassis.drive_sensor_reset(); // Reset drive sensors to 0
+  chassis.slew_drive_set(true);// enable global drive slew
+  chassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
+
+
+  intake.move(127);
+  chassis.pid_odom_set({{{-3.8_in, 27_in}, fwd, DRIVE_SPEED,}},
+
+                                   true);
+
+  chassis.pid_wait_until(15.35_in);
+  scraper.set(true);
+  chassis.pid_wait();
+  
+
+  chassis.pid_drive_set(-1_in, DRIVE_SPEED-15);
+
+
+  chassis.pid_wait_quick_chain();
+  chassis.pid_turn_set(-135_deg, TURN_SPEED-15);
+  chassis.pid_wait_quick_chain();
+
+
+  chassis.pid_drive_set(-6.9_in, DRIVE_SPEED-15);
+  chassis.pid_wait_quick_chain();
+  
+  intake.move(85);
+  hood.set(true);
+  pros::delay(767);
+  intake.move(127);
+  hood.set(false);
+  switcher.set(true);
+
+    // done scoring middle
+
+
+
+  chassis.pid_drive_set(27.5_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  pros::delay(100);
+
+  chassis.pid_drive_set(11.1_in, DRIVE_SPEED-75);
+  chassis.pid_wait_quick_chain();
+
+  pros::delay(1270);
+
+  chassis.pid_turn_set(-180, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  chassis.pid_drive_set(-19_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  hood.set(true);
+  pros::delay(1800);
+
+  chassis.pid_drive_set(2_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  chassis.pid_turn_set(120_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  chassis.pid_drive_set(50_in,DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
 
 
 
