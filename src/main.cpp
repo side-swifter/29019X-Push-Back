@@ -13,7 +13,7 @@ ez::Drive chassis(
 
     6,      // IMU Port
     3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    343);   // Wheel RPM = cartridge * (motor gear / wheel gear)
+    420);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
 // Uncomment the trackers you're using here!
 // - `8` and `9` are smart ports (making these negative will reverse the sensor)
@@ -74,9 +74,14 @@ void initialize() {
       {"Boomerang Pure Pursuit\n. \nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
       {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
       {"Red Left\n\n help", RedLeft},*/
-      {"regular auton right\n\n help", autoright},
-      {"regular auton left\n\n help", autoleft},
-      {"Solow win point auto\n\n help", SWP},
+      {"regular auton left red\n\n help", autoleftred},
+      {"regular auton right red\n\n help", autorightred},
+      {"regular auton left blue\n\n help", autoleftblue},
+      {"regular auton right blue\n\n help", autorightblue},
+      {"Solow win point auto\n\n help", solowin},
+      {"skills auton\n\n help", skills},
+ 
+
 
 
 
@@ -263,9 +268,7 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
 
 
-    if (master.get_digital(DIGITAL_Y)) {
-      void page_down();
-    } 
+
 
 
     if (master.get_digital(DIGITAL_R1)) {
@@ -290,13 +293,7 @@ void opcontrol() {
     hood.set(!hood.get());
   }
 
-
-  if (master.get_digital_new_press(DIGITAL_Y)) {
-    hood.set(!hood.get());
-  }  
-    
-
-  if (master.get_digital(DIGITAL_RIGHT)) {
+  if (master.get_digital(DIGITAL_Y)) {
     descore.set(!descore.get());
   }
 
