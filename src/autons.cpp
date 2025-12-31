@@ -26,20 +26,58 @@ void antijam(){
   intake.move(0);
   TS.move(-127);
   SS.move(-127);
-  pros::delay(250);
+  pros::delay(170);
   intake.move(127);
 }
 
-void colorstop(bool red) {
+
+void colorstop(bool red){
+  hood.set(true);
+  if (red == false) {
+    while (true) {
+      if (CS.get_hue() <= 20 && CS.get_proximity() >=250) {
+        break;
+      }
+     
+
+    pros::delay(10);
+    }
+  } else if (red == true) {
+    while (true) {
+      if (CS.get_hue() >= 100 && CS.get_proximity() >=250) {
+        break;
+      }
+
+    
+    
+    pros::delay(10);
+    }
+  
+  }
+
+
+  intake.move(0);
+  hood.set(false);
+}
+
+void colorstop2() {
+  bool red = true;
+  intake.move(127);
   hood.set(true);
   if (red) {
-    while (CS.get_hue() >= 50) {
+    while (true) {
+      if (CS.get_hue() <= 20 && CS.get_proximity() <=250) {
+        break;
+      }
+     
 
-;    
     pros::delay(20);
     }
   } else {
-    while (CS.get_hue() <= 240 && CS.get_hue() <=140) {
+    while (true) {
+      if (CS.get_hue() >= 130 && CS.get_proximity() <=250) {
+        break;
+      }
 
     
     
@@ -47,9 +85,12 @@ void colorstop(bool red) {
     }
   
   }
+
+
   intake.move(0);
   hood.set(false);
 }
+
 
 
 
@@ -631,45 +672,56 @@ void autoleft(bool red) {
 
 
   intake.move(127);
-  chassis.pid_odom_set({{{-4_in, 29.25_in, -20_deg}, fwd, DRIVE_SPEED,}},
+  chassis.pid_odom_set({{{-5.5_in, 30.4_in, -20_deg}, fwd, 80,}},
 
                                    true);
 
-  chassis.pid_wait_until(16_in);
+  chassis.pid_wait_until(15_in);
   scraper.set(true);
-  chassis.pid_wait();
+  chassis.pid_wait_quick_chain();
 
-  chassis.pid_turn_set(-35_deg, TURN_SPEED);
+  chassis.pid_turn_set(-45_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+
+
+  chassis.pid_drive_set(5.6_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
   
-
-  chassis.pid_odom_set({{{2.6_in, 34.75_in, 225_deg}, rev, DRIVE_SPEED-5}});
+ 
+  chassis.pid_odom_set({{{1.75_in, 39.27_in, 225_deg}, rev, DRIVE_SPEED-5}});
   chassis.pid_wait();
+
+
+  chassis.pid_turn_set(225_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+
   
+
 
   intake.move(0);
   TS.move(-127);
   SS.move(-127);
-  pros::delay(150);
-  intake.move(95);
+  pros::delay(100);
+  intake.move(87);
   hood.set(true);
-  pros::delay(720);
+  pros::delay(625);
   hood.set(false);
   switcher.set(true);
 
     // done scoring middle
 
-  chassis.pid_drive_set(37.4_in, DRIVE_SPEED);
+  chassis.pid_drive_set(34.5_in, DRIVE_SPEED-15);
   chassis.pid_wait_quick_chain();
 
-  chassis.pid_turn_set(180_deg, TURN_SPEED-20);
+  chassis.pid_turn_set(180_deg, TURN_SPEED-15);
   chassis.pid_wait_quick_chain();
 
 
-  chassis.pid_drive_set(10.6_in, DRIVE_SPEED);
+  chassis.pid_drive_set(10.75_in, 60);
   chassis.pid_wait_quick_chain();
 
-  pros::delay(2250);
+
+  pros::delay(360);
 
 
   chassis.pid_turn_set(180_deg, TURN_SPEED);
@@ -679,15 +731,13 @@ void autoleft(bool red) {
   chassis.pid_wait_quick_chain();
 
   hood.set(true);
-  intake.move(0);
-  TS.move(-127);
-  SS.move(-127);
-  pros::delay(350);
+  intake.move(-80);
+  pros::delay(250);
   intake.move(127);
-  pros::delay(500);
-  intake.move(50);
-  colorstop(red);
+  pros::delay(4000);
+  intake.move(0);
  
+
 
 
 }

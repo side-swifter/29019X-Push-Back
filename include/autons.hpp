@@ -24,3 +24,4 @@ void autoleftblue();
 void solowin();
 void skills();
 void testcolor();
+void colorstop2();

@@ -80,7 +80,7 @@ void initialize() {
       {"regular auton right blue\n\n help", autorightblue},
       {"Solow win point auto\n\n help", solowin},
       {"skills auton\n\n help", skills},
- 
+      {"color stop red\n\n help", colorstop2}
 
 
 
@@ -297,8 +297,11 @@ void opcontrol() {
     descore.set(!descore.get());
   }
 
-
-
+    if (ez::as::page_blank_is_on(9)) {
+      ez::screen_print("Hue: " + util::to_string_with_precision(CS.get_hue()), 1);
+      ez::screen_print("Proximity: " + util::to_string_with_precision(CS.get_proximity()), 2);
+      
+    }
     
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
