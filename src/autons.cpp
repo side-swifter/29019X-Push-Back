@@ -710,7 +710,7 @@ void autoleft(bool red) {
 
     // done scoring middle
 
-  chassis.pid_drive_set(34.5_in, DRIVE_SPEED-15);
+  chassis.pid_drive_set(35.8_in, DRIVE_SPEED-15);
   chassis.pid_wait_quick_chain();
 
   chassis.pid_turn_set(180_deg, TURN_SPEED-15);
@@ -721,7 +721,7 @@ void autoleft(bool red) {
   chassis.pid_wait_quick_chain();
 
 
-  pros::delay(360);
+  pros::delay(290);
 
 
   chassis.pid_turn_set(180_deg, TURN_SPEED);
