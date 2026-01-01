@@ -659,7 +659,7 @@ void SWP() {
 
 
 
-void autoleft(bool red) {
+void autoleftsplit(bool red) {
   // left auton code
 
 
@@ -684,11 +684,11 @@ void autoleft(bool red) {
   chassis.pid_wait_quick_chain();
 
 
-  chassis.pid_drive_set(5.6_in, DRIVE_SPEED);
+  chassis.pid_drive_set(2.3_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
   
  
-  chassis.pid_odom_set({{{1.75_in, 39.27_in, 225_deg}, rev, DRIVE_SPEED-5}});
+  chassis.pid_odom_set({{{2_in, 39.1_in, 225_deg}, rev, DRIVE_SPEED-5}});
   chassis.pid_wait();
 
 
@@ -704,39 +704,40 @@ void autoleft(bool red) {
   pros::delay(100);
   intake.move(87);
   hood.set(true);
-  pros::delay(625);
+  pros::delay(500);
   hood.set(false);
   switcher.set(true);
 
     // done scoring middle
 
-  chassis.pid_drive_set(35.8_in, DRIVE_SPEED-15);
+  chassis.pid_drive_set(36.1_in, DRIVE_SPEED-15);
   chassis.pid_wait_quick_chain();
 
   chassis.pid_turn_set(180_deg, TURN_SPEED-15);
   chassis.pid_wait_quick_chain();
 
 
-  chassis.pid_drive_set(10.75_in, 60);
+  chassis.pid_drive_set(13.75_in, 127);
   chassis.pid_wait_quick_chain();
 
 
-  pros::delay(290);
+  pros::delay(450);
 
 
   chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
 
- chassis.pid_drive_set(-24_in, DRIVE_SPEED);
+ chassis.pid_drive_set(-25.8_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
 
   hood.set(true);
   intake.move(-80);
   pros::delay(250);
   intake.move(127);
-  pros::delay(4000);
+  pros::delay(3500);
   intake.move(0);
- 
+
+
 
 
 
@@ -750,8 +751,9 @@ void autoleft(bool red) {
 
 
 
-void autoright(bool red) {
-  // right auton code
+void autoright(bool red, bool right) {
+  // left auton code
+
 
 
   // setup
@@ -760,90 +762,78 @@ void autoright(bool red) {
   chassis.drive_sensor_reset(); // Reset drive sensors to 0
   chassis.slew_drive_set(true);// enable global drive slew
   chassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
-  switcher.set(true);
 
 
-  intake.move(60);
-  chassis.pid_odom_set({{{3.5_in, 27_in}, fwd, DRIVE_SPEED,}},
+  intake.move(127);
+  chassis.pid_odom_set({{{2_in, 30.4_in, -20_deg}, fwd, 100,}},
 
                                    true);
 
-  chassis.pid_wait_until(14.89_in);
+  chassis.pid_wait_until(14_in);
   scraper.set(true);
-  intake.move(100);
-
-  chassis.pid_wait();
+  chassis.pid_wait_quick_chain();
 
   
-
-  chassis.pid_drive_set(-1.24_in, DRIVE_SPEED);
-
-
-  chassis.pid_wait_quick_chain();
-  scraper.set(false);
-  chassis.pid_turn_set(-45_deg, TURN_SPEED);
-  chassis.pid_wait_quick_chain();
-  intake.move(-30);
-  
-
-
-  chassis.pid_drive_set(5.6_in, DRIVE_SPEED);
+  chassis.pid_turn_set(-225_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
 
-  intake.move(0);
-  TS.move(-127);
-  SS.move(-127);
-  pros::delay(1330);
+  switcher.set(true);
+
+  chassis.pid_drive_set(30.8_in, 70);
+  chassis.pid_wait_quick_chain();
+
   intake.move(127);
 
 
-
-  
-
-
-    // done scoring low middle
-
-
-
-  chassis.pid_drive_set(-2_in,DRIVE_SPEED);
+  chassis.pid_turn_set(180_deg, TURN_SPEED-15);
   chassis.pid_wait_quick_chain();
 
-  chassis.pid_turn_set(130_deg, TURN_SPEED);
-  
+  chassis.pid_drive_set(12.8_in, 127);
   chassis.pid_wait_quick_chain();
 
+  pros::delay(440);
 
 
-  chassis.pid_drive_set(18_in, DRIVE_SPEED);
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
 
-  scraper.set(true);
-
-  chassis.pid_turn_set(180_deg, TURN_SPEED-30);
+ chassis.pid_drive_set(-24.6_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
 
-
-  chassis.pid_drive_set(15.75_in, DRIVE_SPEED-80);
-  chassis.pid_wait_quick_chain();
-
-
-  pros::delay(1350);
-
-
-
-
-  chassis.pid_turn_set(182.5_deg, TURN_SPEED);
-  chassis.pid_wait_quick_chain();
-
-  chassis.pid_drive_set(-19_in, DRIVE_SPEED);
-  chassis.pid_wait_quick_chain();
-
-  intake.move(-127);
-  pros::delay(500);
   hood.set(true);
-  colorstop(red);
+  intake.move(-127);
+  pros::delay(250);
+  intake.move(127);
+  pros::delay(2100);
+  intake.move(0);
+  scraper.set(false);
 
 
+  /// descore
+
+  chassis.pid_drive_set(2_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  
+  chassis.pid_turn_set(110_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+
+
+  chassis.pid_drive_set(-4.5_in,80);
+  chassis.pid_wait_quick_chain();
+  hood.set(false);
+
+
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait_quick_chain();
+
+
+  chassis.pid_drive_set(-12.1_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+
+  chassis.pid_turn_set(-30_deg, TURN_SPEED, ccw);
+  chassis.pid_wait_quick_chain();
+  
 
 
 
@@ -996,7 +986,7 @@ void solowin() {
 
 
 
-  pros::delay(510);
+  pros::delay(400);
 
 
 
@@ -1006,21 +996,28 @@ void solowin() {
   chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait_quick_chain();
 
+
   chassis.pid_drive_set(-24_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
-  hood.set(true);
-  pros::delay(600);
   scraper.set(false);
+  hood.set(true);
+
+
+  pros::delay(700);
 
 
 
 
   chassis.pid_drive_set(8_in, DRIVE_SPEED);
-  pros::delay(100);
+  pros::delay(150);
   hood.set(false);
   chassis.pid_wait_quick_chain();
 
   switcher.set(false);
+
+  intake.move(-127);
+  pros::delay(250);
+  intake.move(127);
 
 
   chassis.pid_turn_set(-55_deg, TURN_SPEED);
@@ -1053,7 +1050,7 @@ void solowin() {
   intake.move(0);
   TS.move(-127);
   SS.move(-127);
-  pros::delay(100);
+  pros::delay(200);
   intake.move(127);
   
   pros::delay(375);
@@ -1061,7 +1058,7 @@ void solowin() {
 
 
   switcher.set(true);
-  chassis.pid_drive_set(40_in, DRIVE_SPEED);
+  chassis.pid_drive_set(38_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
 
   chassis.pid_turn_set(180_deg, TURN_SPEED);
@@ -1069,6 +1066,7 @@ void solowin() {
 
   chassis.pid_drive_set(-14_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
+  
   hood.set(true);
   intake.move(0);
   TS.move(-127);
@@ -1242,14 +1240,14 @@ void testcolor() {
 
 // left autos
 
-void autoleftred() {
+void autoleftredsplit() {
   // left auton code
-  autoleft(true);
+  autoleftsplit(true);
 }
 
-void autoleftblue() {
+void autoleftbluesplit() {
   // left auton code
-  autoleft(false);
+  autoleftsplit(false);
 }
 
 
@@ -1259,11 +1257,11 @@ void autoleftblue() {
 
 void autorightred() {
   // right auton code
-  autoright(true);
+  autoright(true, true);
 }
 
 
 void autorightblue() {
   // right auton code
-  autoright(false);
+  autoright(false, false);
 }

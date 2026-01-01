@@ -74,9 +74,9 @@ void initialize() {
       {"Boomerang Pure Pursuit\n. \nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
       {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
       {"Red Left\n\n help", RedLeft},*/
-      {"regular auton left red\n\n help", autoleftred},
+      {"regular auton left red split\n\n help", autoleftredsplit},
       {"regular auton right red\n\n help", autorightred},
-      {"regular auton left blue\n\n help", autoleftblue},
+      {"regular auton left blue split\n\n help", autoleftbluesplit},
       {"regular auton right blue\n\n help", autorightblue},
       {"Solow win point auto\n\n help", solowin},
       {"skills auton\n\n help", skills},
@@ -297,13 +297,7 @@ void opcontrol() {
     descore.set(!descore.get());
   }
 
-    if (ez::as::page_blank_is_on(9)) {
-      ez::screen_print("Hue: " + util::to_string_with_precision(CS.get_hue()), 1);
-      ez::screen_print("Proximity: " + util::to_string_with_precision(CS.get_proximity()), 2);
-      
-    }
-    
-
+  
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   
 }
